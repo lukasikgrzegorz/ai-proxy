@@ -17,7 +17,7 @@ class OllamaHealthChecker {
       console.log(`Sprawdzanie health Ollama: ${this.ollamaUrl}/api/tags`);
       
       const response = await axios.get(`${this.ollamaUrl}/api/tags`, {
-        timeout: 10000, // Zwiększony timeout
+        timeout: 1000, // Zwiększony timeout
         headers: {
           'Connection': 'close', // Zmienione z keep-alive
           'User-Agent': 'AI-Proxy-Health-Check/1.0',

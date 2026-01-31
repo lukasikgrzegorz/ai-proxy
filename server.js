@@ -54,27 +54,6 @@ app.use('/ollama-status', express.json({ limit: '50mb' }));
 app.use('/ollama-diagnostics', express.json({ limit: '50mb' }));
 app.use('/test-ollama-call', express.json({ limit: '50mb' }));
 
-// Middleware autoryzacji API key - USUNIĘTE
-// const authenticateApiKey = (req, res, next) => {
-//   const apiKey = req.headers['x-api-key'];
-//   
-//   if (!apiKey) {
-//     return res.status(401).json({
-//       error: 'Unauthorized',
-//       message: 'Brak nagłówka X-API-Key'
-//     });
-//   }
-//   
-//   if (apiKey !== config.proxyApiKey) {
-//     return res.status(403).json({
-//       error: 'Forbidden',
-//       message: 'Nieprawidłowy API key'
-//     });
-//   }
-//   
-//   next();
-// };
-
 // Endpoint healthcheck
 app.get('/health', (req, res) => {
   res.json({
@@ -380,13 +359,7 @@ const proxyOptions = {
 };
 
 // Główne proxy do Ollama z middleware
-// Endpointy czatowe - zwracają przyjazny komunikat podczas uruchamiania
-app.use(['/api/generate', '/api/chat'], 
-  ollamaHealthChecker.chatMiddleware(),
-  createProxyMiddleware(proxyOptions)
-);
-
-// Pozostałe endpointy API - standardowy middleware (czeka na uruchomienie)
+// Wszystkie endpointy API - standardowy middleware (czeka na uruchomienie)
 app.use('/api', 
   ollamaHealthChecker.middleware(),
   createProxyMiddleware(proxyOptions)
